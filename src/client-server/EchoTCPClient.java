@@ -35,8 +35,15 @@ public class EchoTCPClient
         String input = scanner.nextLine();
         toNetwork.println(input);
 
-        String fromServer = fromNetwork.readLine();
-        System.out.println("[Cliente] Desde servidor: " + fromServer);
+
+        // Leer múltiples líneas del servidor
+        String fromServer;
+        while ((fromServer = fromNetwork.readLine()) != null) {
+            if (fromServer.equals("FIN")) {
+                break;
+            }
+            System.out.println("[Cliente] Desde servidor: " + fromServer);
+        }
     }
 
     private void createStream(Socket socket) throws Exception {
