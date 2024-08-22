@@ -322,7 +322,7 @@ public class Functions {
      * Divide una cadena dada en partes iguales, tiene en cuenta el residuo.
      * @param cadena
      * @param longitudParticiones
-     * @return
+     * @return String[] conteniendo la cadena dividida.
      */
     public static String[] dividirCadenaEnParteIguales(String cadena, int longitudParticiones) {
 
