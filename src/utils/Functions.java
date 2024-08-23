@@ -8,8 +8,8 @@ public class Functions {
         // 1. Conversiones entre entero decimal, binario y hexadecimal.
 
         // a. Convertir un entero decimal a binario, especificando el ancho en bits.
-        int decimal1 = 5;
-        int anchoBitsDecToBin = 6;
+        int decimal1 = 189;
+        int anchoBitsDecToBin = 8;
         String decToBin = convertDecToBin(decimal1, anchoBitsDecToBin);
         System.out.printf("• Se convierte el decimal %d a binario en un ancho de %d bits: %s%n", decimal1, anchoBitsDecToBin, decToBin);
 
@@ -91,7 +91,7 @@ public class Functions {
     public static String convertDecToBin(int dec, int anchoBits) {
         StringBuilder res = new StringBuilder();
 
-        int maxNumber = (int) Math.pow(2, anchoBits-1);
+        int maxNumber = (int) Math.pow(2, anchoBits) - 1;
         if(dec > maxNumber) {
             return "El decimal no se puede representar correctamente con el tamaño de bits indicado.";
         }

@@ -70,6 +70,25 @@ public class EchoTCPServer {
         String instruccion = partes[0];
 
         switch (instruccion) {
+
+            /*
+             * CASOS DEL PUNTO 1
+             */
+            // a) El usuario digita CONV-DEC-BIN seguido de los dos parámetros necesarios para realizar la conversión.
+            case "CONV-DEC-BIN":
+                String decToBin = Functions.convertDecToBin(Integer.parseInt(partes[1]), Integer.parseInt(partes[2]));
+                arraylistAux.add(decToBin);
+                return arraylistAux;
+            // b) El usuario digita CONV-DEC-HEX seguido de los dos parámetros necesarios para realizar la conversión.
+            case "CONV-DEC-HEX":
+                String decToHex = Functions.convertDecToHex(Integer.parseInt(partes[1]), Integer.parseInt(partes[2]));
+                arraylistAux.add(decToHex);
+                return arraylistAux;
+            // c) El usuario digita CONV-BIN-HEXA
+            case "CONV-BIN-HEXA":
+                String binToHex = Functions.convertBinToHex(partes[1]);
+                arraylistAux.add(binToHex);
+                return arraylistAux;
             /*
              * CASOS DEL PUNTO 2
              */
@@ -83,24 +102,55 @@ public class EchoTCPServer {
                 // b) el usuario digita GEN-CAD seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
                 } else { 
                     // No sé si dejarlo así. Espero se entienda jsjs.
-                    StringBuilder aux = new StringBuilder();
+                    StringBuilder auxA = new StringBuilder();
                     String[] auxArr = Functions.dividirCadenaEnParteIguales(Functions.generarCadena(Integer.parseInt(partes[1])), Integer.parseInt(partes[2]));
                     // Itera sobre el array auxiliar y construye la cadena. 
                     for(int i=0; i<auxArr.length; i++){
-                        aux.append(auxArr[i]);
-                        if(i < auxArr.length - 1) aux.append(", ");
+                        auxA.append(auxArr[i]);
+                        if(i < auxArr.length - 1) auxA.append(", ");
                     }
-                    arraylistAux.add(aux.toString());
+                    arraylistAux.add(auxA.toString());
                     return arraylistAux;
                 }
-            // c) el usuario digita GEN-CAD-PAR seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
+            // c) El usuario digita GEN-CAD-PAR seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
             case "GEN-CAD-PAR":
-                String cadena = Functions.generarCadena(Integer.parseInt(partes[1]));
+                String cadenaParaPartesIguales = Functions.generarCadena(Integer.parseInt(partes[1]));
                 int longitudParticiones = Integer.parseInt(partes[2]);
 
-                String[] cadenaPartesIguales = Functions.dividirCadenaEnParteIguales(cadena, longitudParticiones);
+                String[] cadenaPartesIguales = Functions.dividirCadenaEnParteIguales(cadenaParaPartesIguales, longitudParticiones);
                 arraylistAux = new ArrayList<>(Arrays.asList(cadenaPartesIguales));
                 return arraylistAux;
+
+            /*
+             * CASOS DEL PUNTO 3
+             */
+            // a) El usuario digita CAD-SEG seguido de los parámetros necesarios para realizar la operación (cantidad de caracteres y los tamaños de las partes para separar la cadena).
+            case "CAD-SEG":
+                String cadenaParaPartesDesiguales = Functions.generarCadena(Integer.parseInt(partes[1]));
+                int[] volumenesA = new int[partes.length - 2];
+                for(int i=0; i <  volumenesA.length - 1; i++){ 
+                    volumenesA[i] = Integer.parseInt((partes[i + 2]));
+                }
+                String[] cadenaPartesDesiguales = Functions.dividirCadenaPorVolumenesIndicados(cadenaParaPartesDesiguales,volumenesA);
+                StringBuilder auxB = new StringBuilder();
+                for(int i=0; i<cadenaPartesDesiguales.length; i++){
+                    auxB.append(cadenaPartesDesiguales[i]);
+                    if(i < cadenaPartesDesiguales.length - 2) auxB.append(", ");
+                }
+                arraylistAux.add(auxB.toString());
+                return arraylistAux;
+
+            case "CAD-SEG-PAR":
+                String cadenaParaPartesDesigualesPartes = Functions.generarCadena(Integer.parseInt(partes[1]));
+                int[] volumenesB = new int[partes.length - 2];
+                for(int i=0; i <=  volumenesB.length - 1; i++){ 
+                    volumenesB[i] = Integer.parseInt((partes[i + 2]));
+                }
+                System.out.println(volumenesB);
+                String[] cadenasPartesDesigualesPorPartes = Functions.dividirCadenaPorVolumenesIndicados(cadenaParaPartesDesigualesPartes,volumenesB);
+                arraylistAux = new ArrayList<>(Arrays.asList(cadenasPartesDesigualesPorPartes));
+                return arraylistAux;
+
 
             /*
              * CASOS DEL PUNTO 4
