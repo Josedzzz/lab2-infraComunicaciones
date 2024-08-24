@@ -299,7 +299,7 @@ public class Functions {
      * @param cantidadCaracteres
      * @return cadenaFinal.toString()
      */
-    public static String generarCadena(Integer cantidadCaracteres) {
+    public static String generarCadena(int cantidadCaracteres) {
 
         StringBuilder cadenaFinal =  new StringBuilder();
         
