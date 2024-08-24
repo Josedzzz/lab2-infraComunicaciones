@@ -39,14 +39,8 @@ public class EchoTCPServer {
         System.out.println("[Server] Desde cliente: " + message);
 
         List<String> answer = interpretarMensaje(message);
-        answer.add("FIN");
-        if(answer.size() != 2) {
-            for(int i=0; i < answer.size(); i++){
-                toNetwork.println(answer.get(i));
-            }
-        } else {
-            toNetwork.println(answer.get(0));
-            toNetwork.println(answer.get(1));
+        for(String partialAnswer : answer) {
+            toNetwork.println(partialAnswer);
         }
     }
 
