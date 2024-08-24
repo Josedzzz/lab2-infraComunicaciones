@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -39,9 +38,6 @@ public class EchoTCPClient
         // Leer múltiples líneas del servidor
         String fromServer;
         while ((fromServer = fromNetwork.readLine()) != null) {
-            if (fromServer.equals("FIN")) {
-                break;
-            }
             System.out.println("[Cliente] Desde servidor: " + fromServer);
         }
     }

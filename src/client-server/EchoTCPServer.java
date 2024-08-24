@@ -42,6 +42,7 @@ public class EchoTCPServer {
         for(String partialAnswer : answer) {
             toNetwork.println(partialAnswer);
         }
+        serversideSocket.close();
     }
 
     public void createStreams(Socket socket) throws Exception {
