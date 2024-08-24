@@ -95,30 +95,43 @@ public class EchoTCPServer {
 
             case "GEN-CAD": // Este caso incluye la cantidad de carácteres de la cadena. Estará en partes[1].
 
-                //  a) El usuario digita GEN-CAD seguido de la cantidad de caracteres que requiere generar.
+                // a) El usuario digita GEN-CAD seguido de la cantidad de caracteres que requiere generar.
                 if(partes.length == 2) {
-                    arraylistAux.add(Functions.generarCadena(Integer.parseInt(partes[1])));
-                    return arraylistAux;
-                // b) el usuario digita GEN-CAD seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
-                } else { 
-                    // No sé si dejarlo así. Espero se entienda jsjs.
-                    StringBuilder auxA = new StringBuilder();
-                    String[] auxArr = Functions.dividirCadenaEnParteIguales(Functions.generarCadena(Integer.parseInt(partes[1])), Integer.parseInt(partes[2]));
-                    // Itera sobre el array auxiliar y construye la cadena. 
-                    for(int i=0; i<auxArr.length; i++){
-                        auxA.append(auxArr[i]);
-                        if(i < auxArr.length - 1) auxA.append(", ");
+                    try {
+                        arraylistAux.add(Functions.generarCadena(Integer.parseInt(partes[1])));
+                    } catch (NumberFormatException e) {
+                        arraylistAux.add(e.getMessage());
                     }
-                    arraylistAux.add(auxA.toString());
-                    return arraylistAux;
-                }
+                // b) el usuario digita GEN-CAD seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
+                } else if (partes.length == 3) {
+                    try {
+                        int longitudCadenaGenerar = Integer.parseInt(partes[1]);
+                        int longitudSegmentosCadenaGenerada = Integer.parseInt(partes[2]);
+                        String[] auxArr = Functions.dividirCadenaEnParteIguales(Functions.generarCadena(longitudCadenaGenerar), longitudSegmentosCadenaGenerada);
+                        arraylistAux.add(String.join(", ", auxArr));
+                    } catch (NumberFormatException e) {
+                        arraylistAux.add(e.getMessage());
+                    }
+                } else { 
+                    String falloParam = "Número incorrecto de parámetros";
+                    arraylistAux.add(falloParam);
+                } 
+                return arraylistAux;
             // c) El usuario digita GEN-CAD-PAR seguido de los dos parámetros necesarios para realizar la operación (cantidad de caracteres y la cantidad de caracteres para cada uno de los segmentos).
             case "GEN-CAD-PAR":
-                String cadenaParaPartesIguales = Functions.generarCadena(Integer.parseInt(partes[1]));
+                int longitudCadenaGenerar1 = Integer.parseInt(partes[1]);
                 int longitudParticiones = Integer.parseInt(partes[2]);
 
-                String[] cadenaPartesIguales = Functions.dividirCadenaEnParteIguales(cadenaParaPartesIguales, longitudParticiones);
-                arraylistAux = new ArrayList<>(Arrays.asList(cadenaPartesIguales));
+                // Se verifica si la longitud de la cadena es múltiplo de 16
+                if (longitudCadenaGenerar1%16 != 0) {
+                    String errLongCadena = "La longitud de la cadena no es múltiplo de 16";
+                    arraylistAux.add(errLongCadena);
+                } else {
+                    String cadenaParaPartesIguales = Functions.generarCadena(longitudCadenaGenerar1);
+                    arraylistAux = new ArrayList<>(Arrays.asList(
+                        Functions.dividirCadenaEnParteIguales(cadenaParaPartesIguales, longitudParticiones)
+                    ));
+                }
                 return arraylistAux;
 
             /*
@@ -166,7 +179,9 @@ public class EchoTCPServer {
                 return arraylistAux;
             
             default:
-                return null;
+                String errComandoDesconocido = "El comando que envío es desconocido.";
+                arraylistAux.add(errComandoDesconocido)
+                return arraylistAux;
         }
 
 
